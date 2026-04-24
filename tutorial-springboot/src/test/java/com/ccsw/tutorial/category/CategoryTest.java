@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,4 +56,32 @@ public class CategoryTest {
 
         assertEquals(CATEGORY_NAME, category.getValue().getName());
     }
+
+    public static final Long EXISTS_CATEGORY_ID = 1L;
+
+    @Test
+    public void saveExistsCategoryIdShouldUpdate() {
+
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName(CATEGORY_NAME);
+
+        Category category = mock(Category.class);
+        when(categoryRepository.findById(EXISTS_CATEGORY_ID)).thenReturn(Optional.of(category));
+
+        categoryService.save(EXISTS_CATEGORY_ID, categoryDto);
+
+        verify(categoryRepository).save(category);
+    }
+
+    @Test
+    public void deleteExistsCategoryIdShouldDelete() throws Exception {
+
+        Category category = mock(Category.class);
+        when(categoryRepository.findById(EXISTS_CATEGORY_ID)).thenReturn(Optional.of(category));
+
+        categoryService.delete(EXISTS_CATEGORY_ID);
+
+        verify(categoryRepository).deleteById(EXISTS_CATEGORY_ID);
+    }
+
 }

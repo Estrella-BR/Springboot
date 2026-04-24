@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -60,5 +61,44 @@ public class CategoryIT {
         CategoryDto categorySearch = response.getBody().stream().filter(item -> item.getId().equals(NEW_CATEGORY_ID)).findFirst().orElse(null);
         assertNotNull(categorySearch);
         assertEquals(NEW_CATEGORY_NAME, categorySearch.getName());
+    }
+
+    public static final Long MODIFY_CATEGORY_ID = 3L;
+
+    @Test
+    public void modifyWithExistIdShouldModifyCategory() {
+
+        CategoryDto dto = new CategoryDto();
+        dto.setName(NEW_CATEGORY_NAME);
+
+        restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + MODIFY_CATEGORY_ID, HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
+
+        ResponseEntity<List<CategoryDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
+        assertNotNull(response);
+        assertEquals(3, response.getBody().size());
+
+        CategoryDto categorySearch = response.getBody().stream().filter(item -> item.getId().equals(MODIFY_CATEGORY_ID)).findFirst().orElse(null);
+        assertNotNull(categorySearch);
+        assertEquals(NEW_CATEGORY_NAME, categorySearch.getName());
+    }
+
+    public static final Long DELETE_CATEGORY_ID = 2L;
+
+    @Test
+    public void deleteWithExistsIdShouldDeleteCategory() {
+
+        restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + DELETE_CATEGORY_ID, HttpMethod.DELETE, null, Void.class);
+
+        ResponseEntity<List<CategoryDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
+        assertNotNull(response);
+        assertEquals(2, response.getBody().size());
+    }
+
+    @Test
+    public void deleteWithNotExistsIdShouldInternalError() {
+
+        ResponseEntity<?> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + NEW_CATEGORY_ID, HttpMethod.DELETE, null, Void.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }
