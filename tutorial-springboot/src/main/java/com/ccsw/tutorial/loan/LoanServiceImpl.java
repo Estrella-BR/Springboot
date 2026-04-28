@@ -2,8 +2,11 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,10 +48,9 @@ public class LoanServiceImpl implements LoanService {
         } else {
             loan = this.get(id);
         }
-        // category.setName(dto.getName());
-        loan.setBeginDate(dto.getBeginDate());
-        loan.setEndDate(dto.getEndDate());
-        
+
+        BeanUtils.copyProperties(dto, loan, "id");
+
         this.loanRepository.save(loan);
     }
 
@@ -63,5 +65,14 @@ public class LoanServiceImpl implements LoanService {
         }
 
         this.loanRepository.deleteById(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Page<Loan> findPage(LoanSearchDto dto) {
+
+        return this.loanRepository.findAll(dto.getPageable().getPageable());
     }
 }

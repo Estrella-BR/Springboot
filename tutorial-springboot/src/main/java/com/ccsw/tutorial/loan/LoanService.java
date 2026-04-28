@@ -2,6 +2,8 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -35,4 +37,13 @@ public interface LoanService {
      * @param id PK de la entidad
      */
     void delete(Long id) throws Exception;
+
+    /**
+     * Método para recuperar un listado paginado de {@link Loan}
+     *
+     * @param dto dto de búsqueda
+     * @return {@link Page} de {@link Loan}
+     */
+    Page<Loan> findPage(LoanSearchDto dto);
+
 }

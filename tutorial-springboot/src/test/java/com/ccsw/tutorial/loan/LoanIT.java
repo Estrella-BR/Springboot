@@ -1,6 +1,9 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.common.pagination.PageableRequest;
+import com.ccsw.tutorial.config.ResponsePage;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,13 @@ public class LoanIT {
     public static final String LOCALHOST = "http://localhost:";
     public static final String SERVICE_PATH = "/loan";
 
+    public static final Long NEW_LOAN_ID = 7L;
+    public static final Date NEW_LOAN_BEGINDATE = Date.from(Instant.parse("2025-08-15T23:00:00.000+00:00"));
+    public static final Date NEW_LOAN_ENDNDATE = Date.from(Instant.parse("2025-08-19T23:00:00.000+00:00"));
+
+    private static final int TOTAL_LOANS = 6;
+    private static final int PAGE_SIZE = 5;
+
     @LocalServerPort
     private int port;
 
@@ -35,18 +45,17 @@ public class LoanIT {
     ParameterizedTypeReference<List<LoanDto>> responseType = new ParameterizedTypeReference<List<LoanDto>>() {
     };
 
+    ParameterizedTypeReference<ResponsePage<LoanDto>> responseTypePage = new ParameterizedTypeReference<ResponsePage<LoanDto>>() {
+    };
+
     @Test
     public void findAllShouldReturnAllLoans() {
 
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
 
         assertNotNull(response);
-        assertEquals(3, response.getBody().size());
+        assertEquals(TOTAL_LOANS, response.getBody().size());
     }
-
-    public static final Long NEW_LOAN_ID = 4L;
-    public static final Date NEW_LOAN_BEGINDATE = Date.from(Instant.parse("2025-08-15T23:00:00.000+00:00"));
-    public static final Date NEW_LOAN_ENDNDATE = Date.from(Instant.parse("2025-08-19T23:00:00.000+00:00"));
 
     @Test
     public void saveWithoutIdShouldCreateNewLoan() {
@@ -58,7 +67,7 @@ public class LoanIT {
 
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(4, response.getBody().size());
+        assertEquals(TOTAL_LOANS + 1, response.getBody().size());
 
         LoanDto loanSearch = response.getBody().stream().filter(item -> item.getId().equals(NEW_LOAN_ID)).findFirst().orElse(null);
         assertNotNull(loanSearch);
@@ -78,7 +87,7 @@ public class LoanIT {
 
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(3, response.getBody().size());
+        assertEquals(TOTAL_LOANS, response.getBody().size());
 
         LoanDto loanSearch = response.getBody().stream().filter(item -> item.getId().equals(MODIFY_LOAN_ID)).findFirst().orElse(null);
         assertNotNull(loanSearch);
@@ -94,7 +103,7 @@ public class LoanIT {
 
         ResponseEntity<List<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(2, response.getBody().size());
+        assertEquals(TOTAL_LOANS - 1, response.getBody().size());
     }
 
     @Test
@@ -103,5 +112,18 @@ public class LoanIT {
         ResponseEntity<?> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + NEW_LOAN_ID, HttpMethod.DELETE, null, Void.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void findFirstPageWithFiveSizeShouldReturnFirstFiveResults() {
+
+        LoanSearchDto searchDto = new LoanSearchDto();
+        searchDto.setPageable(new PageableRequest(0, PAGE_SIZE));
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.POST, new HttpEntity<>(searchDto), responseTypePage);
+
+        assertNotNull(response);
+        assertEquals(TOTAL_LOANS, response.getBody().getTotalElements());
+        assertEquals(PAGE_SIZE, response.getBody().getContent().size());
     }
 }

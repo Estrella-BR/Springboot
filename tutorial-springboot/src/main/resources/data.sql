@@ -20,6 +20,9 @@ INSERT INTO client(name) VALUES ('Alberto Hernandez Martinez');
 INSERT INTO client(name) VALUES ('Maria Peña Lopez');
 INSERT INTO client(name) VALUES ('Diego Sandoval Chacon');
 
+INSERT INTO loan(begin_date,end_date) VALUES ('2024-02-15','2024-02-16');
+INSERT INTO loan(begin_date,end_date) VALUES ('2024-03-05','2024-03-16');
+INSERT INTO loan(begin_date,end_date) VALUES ('2025-01-05','2025-01-16');
 INSERT INTO loan(begin_date,end_date) VALUES ('2025-02-05','2025-02-16');
 INSERT INTO loan(begin_date,end_date) VALUES ('2025-03-05','2025-03-16');
 INSERT INTO loan(begin_date,end_date) VALUES ('2025-04-05','2025-03-16');
