@@ -19,3 +19,7 @@ INSERT INTO game(title, age, category_id, author_id) VALUES ('Azul', '8', 3, 5);
 INSERT INTO client(name) VALUES ('Alberto Hernandez Martinez');
 INSERT INTO client(name) VALUES ('Maria Peña Lopez');
 INSERT INTO client(name) VALUES ('Diego Sandoval Chacon');
+
+INSERT INTO loan(begin_date,end_date) VALUES ('2025-02-05','2025-02-16');
+INSERT INTO loan(begin_date,end_date) VALUES ('2025-03-05','2025-03-16');
+INSERT INTO loan(begin_date,end_date) VALUES ('2025-04-05','2025-03-16');
