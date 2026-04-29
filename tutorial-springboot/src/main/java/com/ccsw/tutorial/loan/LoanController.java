@@ -26,20 +26,6 @@ public class LoanController {
     ModelMapper mapper;
 
     /**
-     * Método para recuperar todas las {@link Loan}
-     *
-     * @return {@link List} de {@link LoanDto}
-     */
-    @Operation(summary = "Find", description = "Method that return a list of Categories")
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<LoanDto> findAll() {
-
-        List<Loan> categories = this.loanService.findAll();
-
-        return categories.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
-    }
-
-    /**
      * Método para crear o actualizar una {@link Loan}
      *
      * @param id PK de la entidad
@@ -71,12 +57,28 @@ public class LoanController {
      */
     @Operation(summary = "Find Page", description = "Method that return a page of Authors")
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public Page<LoanDto> find(@RequestBody LoanSearchDto dto, @RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame) {
+    public Page<LoanDto> find(@RequestBody LoanSearchDto dto) {
 
         Page<Loan> page = this.loanService.findPage(dto);
 
         return new PageImpl<>(page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), page.getPageable(), page.getTotalElements());
 
+    }
+
+    /**
+     * Método para recuperar una lista de {@link Loan}
+     *
+     * @param idClient PK del cliente
+     * @param idGame PK del game
+     * @return {@link List} de {@link LoanDto}
+     */
+    @Operation(summary = "Find", description = "Method that return a filtered list of Games")
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public List<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame) {
+
+        List<Loan> games = loanService.find(idClient, idGame);
+
+        return games.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
     }
 
 }

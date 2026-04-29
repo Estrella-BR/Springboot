@@ -1,7 +1,9 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.client.model.ClientDto;
 import com.ccsw.tutorial.common.pagination.PageableRequest;
 import com.ccsw.tutorial.config.ResponsePage;
+import com.ccsw.tutorial.game.model.GameDto;
 import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.junit.jupiter.api.Test;
@@ -69,8 +71,15 @@ public class LoanIT {
     @Test
     public void saveWithoutIdShouldCreateNewLoan() {
         LoanDto dto = new LoanDto();
+        ClientDto clientDto = new ClientDto();
+        GameDto gameDto = new GameDto();
+
+        clientDto.setId(1L);
+        gameDto.setId(1L);
         dto.setBeginDate(NEW_LOAN_BEGINDATE);
         dto.setEndDate(NEW_LOAN_ENDNDATE);
+        dto.setClient(clientDto);
+        dto.setGame(gameDto);
 
         restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
 
@@ -83,14 +92,21 @@ public class LoanIT {
         assertEquals(NEW_LOAN_BEGINDATE, loanSearch.getBeginDate());
     }
 
-    public static final Long MODIFY_LOAN_ID = 3L;
+    public static final Long MODIFY_LOAN_ID = 5L;
 
     @Test
     public void modifyWithExistIdShouldModifyLoan() {
 
         LoanDto dto = new LoanDto();
+        ClientDto clientDto = new ClientDto();
+        GameDto gameDto = new GameDto();
+
+        clientDto.setId(1L);
+        gameDto.setId(1L);
         dto.setBeginDate(NEW_LOAN_BEGINDATE);
         dto.setEndDate(NEW_LOAN_ENDNDATE);
+        dto.setClient(clientDto);
+        dto.setGame(gameDto);
 
         restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + MODIFY_LOAN_ID, HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
 

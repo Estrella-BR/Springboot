@@ -33,7 +33,7 @@ public class GameIT {
     public static final Long EXISTS_GAME_ID = 1L;
     public static final Long NOT_EXISTS_GAME_ID = 0L;
     private static final String NOT_EXISTS_TITLE = "NotExists";
-    private static final String EXISTS_TITLE = "Aventureros";
+    private static final String EXISTS_TITLE = "Mars";
     private static final String NEW_TITLE = "Nuevo juego";
     private static final Long NOT_EXISTS_CATEGORY = 0L;
     private static final Long EXISTS_CATEGORY = 1L;
@@ -87,7 +87,7 @@ public class GameIT {
     @Test
     public void findExistsCategoryShouldReturnGames() {
 
-        int GAMES_WITH_FILTER = 2;
+        int GAMES_WITH_FILTER = 4;
 
         Map<String, Object> params = new HashMap<>();
         params.put(TITLE_PARAM, null);

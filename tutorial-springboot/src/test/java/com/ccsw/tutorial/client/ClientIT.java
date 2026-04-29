@@ -30,7 +30,7 @@ public class ClientIT {
     public static final String NEW_CLIENT_NAME = "CAT4";
     public static final Long MODIFY_CLIENT_ID = 3L;
     public static final Long TOTAL_CLIENTS = 3L;
-    public static final Long DELETE_CLIENT_ID = 3L;
+    public static final Long DELETE_CLIENT_ID = 1L;
 
     @LocalServerPort
     private int port;
@@ -86,12 +86,11 @@ public class ClientIT {
 
     @Test
     public void deleteWithExistsIdShouldDeleteClient() {
-
         restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + DELETE_CLIENT_ID, HttpMethod.DELETE, null, Void.class);
 
         ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.GET, null, responseType);
         assertNotNull(response);
-        assertEquals(2, response.getBody().size());
+        assertEquals(TOTAL_CLIENTS - 1, response.getBody().size());
     }
 
     @Test

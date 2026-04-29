@@ -48,6 +48,6 @@ public interface LoanService {
      * @param idClient PK del cliente
      * @return {@link List} de {@link Game}
      */
-    //Page<Loan> find(Long idGame, Long idClient, LoanSearchDto dto);
+    List<Loan> find(Long idGame, Long idClient);
 
 }
