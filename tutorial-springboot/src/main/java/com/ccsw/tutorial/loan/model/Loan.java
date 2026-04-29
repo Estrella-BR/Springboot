@@ -2,7 +2,7 @@ package com.ccsw.tutorial.loan.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "loan")
@@ -13,10 +13,10 @@ public class Loan {
     private Long id;
 
     @Column(name = "begin_date", nullable = false)
-    private Date beginDate;
+    private LocalDate beginDate;
 
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     public Long getId() {
         return id;
@@ -26,19 +26,19 @@ public class Loan {
         this.id = id;
     }
 
-    public Date getBeginDate() {
+    public LocalDate getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(LocalDate beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 }

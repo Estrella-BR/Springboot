@@ -16,8 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,8 +29,8 @@ public class LoanIT {
     public static final String SERVICE_PATH = "/loan";
 
     public static final Long NEW_LOAN_ID = 7L;
-    public static final Date NEW_LOAN_BEGINDATE = Date.from(Instant.parse("2025-08-15T23:00:00.000+00:00"));
-    public static final Date NEW_LOAN_ENDNDATE = Date.from(Instant.parse("2025-08-19T23:00:00.000+00:00"));
+    public static final LocalDate NEW_LOAN_BEGINDATE = LocalDate.of(2025, 8, 15);
+    public static final LocalDate NEW_LOAN_ENDNDATE = LocalDate.of(2025, 8, 19);
 
     private static final int TOTAL_LOANS = 6;
     private static final int PAGE_SIZE = 5;
