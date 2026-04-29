@@ -71,7 +71,7 @@ public class LoanController {
      */
     @Operation(summary = "Find Page", description = "Method that return a page of Authors")
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public Page<LoanDto> findPage(@RequestBody LoanSearchDto dto) {
+    public Page<LoanDto> find(@RequestBody LoanSearchDto dto, @RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame) {
 
         Page<Loan> page = this.loanService.findPage(dto);
 

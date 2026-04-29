@@ -1,5 +1,7 @@
 package com.ccsw.tutorial.loan.model;
 
+import com.ccsw.tutorial.client.model.Client;
+import com.ccsw.tutorial.game.model.Game;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -17,6 +19,14 @@ public class Loan {
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
 
     public Long getId() {
         return id;
@@ -40,5 +50,21 @@ public class Loan {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

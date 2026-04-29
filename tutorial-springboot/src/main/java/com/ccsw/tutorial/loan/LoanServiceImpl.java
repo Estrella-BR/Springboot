@@ -1,5 +1,7 @@
 package com.ccsw.tutorial.loan;
 
+import com.ccsw.tutorial.client.ClientService;
+import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
@@ -16,6 +18,12 @@ import java.util.List;
 public class LoanServiceImpl implements LoanService {
     @Autowired
     LoanRepository loanRepository;
+
+    @Autowired
+    GameService gameService;
+
+    @Autowired
+    ClientService clientService;
 
     /**
      * {@inheritDoc}
@@ -49,8 +57,9 @@ public class LoanServiceImpl implements LoanService {
             loan = this.get(id);
         }
 
-        BeanUtils.copyProperties(dto, loan, "id");
-
+        BeanUtils.copyProperties(dto, loan, "id", "game", "client");
+        loan.setClient(clientService.get(dto.getClient().getId()));
+        loan.setGame(gameService.get(dto.getGame().getId()));
         this.loanRepository.save(loan);
     }
 
@@ -75,4 +84,16 @@ public class LoanServiceImpl implements LoanService {
 
         return this.loanRepository.findAll(dto.getPageable().getPageable());
     }
+
+    /*
+    @Override
+    public Page<Loan> find(Long idClient, Long idGame, LoanSearchDto dto) {
+
+        LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("client.id", ":", idClient));
+        LoanSpecification gameSpec = new LoanSpecification(new SearchCriteria("game.id", ":", idGame));
+
+        Specification<Loan> spec = Specification.where(clientSpec).and(gameSpec);
+
+        return this.loanRepository.findAll(spec, dto.getPageable().getPageable());
+    }*/
 }
