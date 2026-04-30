@@ -11,7 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface LoanRepository extends CrudRepository<Loan, Long>, JpaSpecificationExecutor<Loan> {
 
     @Override
-    @EntityGraph(attributePaths = { "client", "game" })
+    @EntityGraph(attributePaths = { "client", "game", "beginDate" })
     Page<Loan> findAll(Specification<Loan> spec, Pageable pageable);
 
 }

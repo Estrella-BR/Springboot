@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -110,9 +111,9 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public Page<Loan> find(Long idClient, Long idGame, Pageable pageable) {
+    public Page<Loan> find(Long idClient, Long idGame, LocalDate date, Pageable pageable) {
 
-        Specification<Loan> spec = LoanSpecification.withFilters(idClient, idGame);
+        Specification<Loan> spec = LoanSpecification.withFilters(idClient, idGame, date);
 
         return loanRepository.findAll(spec, pageable);
 
