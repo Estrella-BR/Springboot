@@ -63,6 +63,13 @@ public class LoanServiceImpl implements LoanService {
             loan = this.get(id);
         }
 
+        long daysBetween = dto.getBeginDate().getDayOfMonth() - dto.getEndDate().getDayOfMonth();
+        daysBetween = Math.abs(daysBetween);
+
+        if (daysBetween < 0 || daysBetween > 16) {
+            throw new RuntimeException("El préstamo no puede durar más de 16 días" + daysBetween);
+        }
+
         BeanUtils.copyProperties(dto, loan, "id", "game", "client");
         loan.setClient(clientService.get(dto.getClient().getId()));
         loan.setGame(gameService.get(dto.getGame().getId()));
