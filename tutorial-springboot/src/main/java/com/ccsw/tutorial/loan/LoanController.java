@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,11 +75,11 @@ public class LoanController {
      */
     @Operation(summary = "Find", description = "Method that return a filtered list of Games")
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame) {
+    public Page<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame, Pageable pageable) {
 
-        List<Loan> games = loanService.find(idClient, idGame);
+        Page<Loan> page = loanService.find(idClient, idGame, pageable);
 
-        return games.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
+        return page.map(loan -> mapper.map(loan, LoanDto.class));
     }
 
 }

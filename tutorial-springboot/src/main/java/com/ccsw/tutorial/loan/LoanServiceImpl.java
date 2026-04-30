@@ -2,6 +2,7 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.client.ClientService;
 import com.ccsw.tutorial.common.criteria.SearchCriteria;
+import com.ccsw.tutorial.common.pagination.PageableRequest;
 import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -79,12 +81,27 @@ public class LoanServiceImpl implements LoanService {
         this.loanRepository.deleteById(id);
     }
 
-    private Specification<Loan> createSpecification(LoanSearchDto dto) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Page<Loan> findPage(LoanSearchDto dto) {
+
+        PageableRequest pageableRequest = dto.getPageable();
+
+        Pageable pageable = PageRequest.of(pageableRequest.getPageNumber(), pageableRequest.getPageSize());
+
+        Specification<Loan> spec = buildSpecification(dto.getCriteria());
+
+        return this.loanRepository.findAll(spec, pageable);
+    }
+
+    private Specification<Loan> buildSpecification(List<SearchCriteria> criteriaList) {
 
         Specification<Loan> spec = Specification.where(null);
 
-        if (dto.getCriteria() != null) {
-            for (SearchCriteria criteria : dto.getCriteria()) {
+        if (criteriaList != null) {
+            for (SearchCriteria criteria : criteriaList) {
                 spec = spec.and(new LoanSpecification(criteria));
             }
         }
@@ -92,26 +109,12 @@ public class LoanServiceImpl implements LoanService {
         return spec;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public Page<Loan> findPage(LoanSearchDto dto) {
+    public Page<Loan> find(Long idClient, Long idGame, Pageable pageable) {
 
-        Specification<Loan> spec = createSpecification(dto);
-        Pageable pageable = dto.getPageable().getPageable();
+        Specification<Loan> spec = LoanSpecification.withFilters(idClient, idGame);
 
-        return this.loanRepository.findAll(spec, pageable);
-    }
+        return loanRepository.findAll(spec, pageable);
 
-    @Override
-    public List<Loan> find(Long idClient, Long idGame) {
-
-        LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("client.id", ":", idClient));
-        LoanSpecification gameSpec = new LoanSpecification(new SearchCriteria("game.id", ":", idGame));
-
-        Specification<Loan> spec = Specification.where(clientSpec).and(gameSpec);
-
-        return this.loanRepository.findAll(spec);
     }
 }
