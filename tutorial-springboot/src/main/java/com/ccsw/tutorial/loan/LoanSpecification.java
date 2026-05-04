@@ -33,10 +33,6 @@ public class LoanSpecification implements Specification<Loan> {
             }
 
             if (date != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("loanDate"), date));
-            }
-
-            if (date != null) {
                 predicates.add(cb.and(cb.lessThanOrEqualTo(root.get("beginDate"), date), cb.greaterThanOrEqualTo(root.get("endDate"), date)));
             }
 

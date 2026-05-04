@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -56,6 +57,8 @@ public class LoanServiceImpl implements LoanService {
     public void save(Long id, LoanDto dto) {
 
         Loan loan;
+        List<Loan> loans = loanRepository.findLoansInDateRange(dto.getBeginDate(), dto.getEndDate());
+        Integer clientLoans = 0;
 
         if (id == null) {
             loan = new Loan();
@@ -69,6 +72,16 @@ public class LoanServiceImpl implements LoanService {
         if (daysBetween < 0 || daysBetween > 16) {
             throw new RuntimeException("El préstamo no puede durar más de 16 días" + daysBetween);
         }
+
+        for (Loan l : loans) {
+            if (Objects.equals(l.getClient().getId(), dto.getClient().getId()) && l.getId() != loan.getId())
+                clientLoans++;
+            if (l.getGame().getId() == dto.getGame().getId() && l.getId() != loan.getId())
+                throw new RuntimeException("El juego ya está prestado");
+        }
+
+        if (clientLoans == 2)
+            throw new RuntimeException("El cliente ya tiene prestado 2 juegos");
 
         BeanUtils.copyProperties(dto, loan, "id", "game", "client");
         loan.setClient(clientService.get(dto.getClient().getId()));
