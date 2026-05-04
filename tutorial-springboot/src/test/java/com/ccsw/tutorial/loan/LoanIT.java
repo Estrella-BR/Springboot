@@ -36,6 +36,8 @@ public class LoanIT {
     private static final Long EXISTS_CLIENT = 3L;
     private static final Long NOT_EXISTS_GAME = 7L;
     private static final Long NOT_EXISTS_CLIENT = 4L;
+    private static final LocalDate EXIST_DATE = LocalDate.of(2025, 3, 6);
+    private static final LocalDate NOT_EXIST_DATE = LocalDate.of(2026, 8, 1);
 
     private static final Long MODIFY_LOAN_ID = 5L;
     private static final Long DELETE_LOAN_ID = 2L;
@@ -174,6 +176,16 @@ public class LoanIT {
     }
 
     @Test
+    public void findExistsDateShouldReturnLoans() {
+
+        String url = UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam("date", EXIST_DATE).toUriString();
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
+
+        assertEquals(2, response.getBody().getTotalElements());
+    }
+
+    @Test
     public void findExistsGameAndClientShouldReturnLoans() {
 
         String url = UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam("idGame", EXISTS_GAME).queryParam("idClient", EXISTS_CLIENT).toUriString();
@@ -184,9 +196,19 @@ public class LoanIT {
     }
 
     @Test
-    public void findNotExistsGameOrClientShouldReturnEmpty() {
+    public void findExistsGameAndClientAndDateShouldReturnLoans() {
 
-        String url = UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam("idGame", NOT_EXISTS_GAME).queryParam("idClient", NOT_EXISTS_CLIENT).toUriString();
+        String url = UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam("idGame", EXISTS_GAME).queryParam("idClient", EXISTS_CLIENT).queryParam("date", EXIST_DATE).toUriString();
+
+        ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
+
+        assertEquals(1, response.getBody().getTotalElements());
+    }
+
+    @Test
+    public void findNotExistsGameOrClientOrDateShouldReturnEmpty() {
+
+        String url = UriComponentsBuilder.fromHttpUrl(LOCALHOST + port + SERVICE_PATH).queryParam("idGame", NOT_EXISTS_GAME).queryParam("idClient", NOT_EXISTS_CLIENT).queryParam("date", NOT_EXIST_DATE).toUriString();
 
         ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
 
