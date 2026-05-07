@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,10 +75,10 @@ public class LoanController {
      * @param idGame PK del game
      * @return {@link List} de {@link LoanDto}
      */
-    @Operation(summary = "Find", description = "Method that return a filtered list of Games")
+    @Operation(summary = "Find", description = "Method that return a filtered list of Loans")
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public Page<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "date", required = false) LocalDate date,
-            Pageable pageable) {
+    public Page<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame,
+            @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date, Pageable pageable) {
 
         Page<Loan> page = loanService.find(idClient, idGame, date, pageable);
 

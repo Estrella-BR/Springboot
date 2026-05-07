@@ -17,7 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,15 +37,15 @@ public class LoanIT {
     private static final Long EXISTS_CLIENT = 3L;
     private static final Long NOT_EXISTS_GAME = 7L;
     private static final Long NOT_EXISTS_CLIENT = 4L;
-    private static final LocalDate EXIST_DATE = LocalDate.of(2025, 3, 6);
-    private static final LocalDate NOT_EXIST_DATE = LocalDate.of(2026, 8, 1);
+    private static final Date EXIST_DATE = Date.from(Instant.parse("2025-03-03T14:30:00.000Z"));
+    private static final Date NOT_EXIST_DATE = Date.from(Instant.parse("2026-03-03T14:30:00.000Z"));
 
     private static final Long MODIFY_LOAN_ID = 5L;
     private static final Long DELETE_LOAN_ID = 2L;
     private static final Long NEW_LOAN_ID = 7L;
 
-    private static final LocalDate NEW_LOAN_BEGINDATE = LocalDate.of(2025, 8, 15);
-    private static final LocalDate NEW_LOAN_ENDDATE = LocalDate.of(2025, 8, 19);
+    private static final Date NEW_LOAN_BEGINDATE = Date.from(Instant.parse("2026-05-03T14:30:00.000Z"));
+    private static final Date NEW_LOAN_ENDDATE = Date.from(Instant.parse("2026-05-13T14:30:00.000Z"));
 
     @LocalServerPort
     private int port;

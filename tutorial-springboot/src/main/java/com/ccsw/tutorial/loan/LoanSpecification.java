@@ -5,8 +5,8 @@ import com.ccsw.tutorial.loan.model.Loan;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LoanSpecification implements Specification<Loan> {
@@ -20,7 +20,7 @@ public class LoanSpecification implements Specification<Loan> {
         this.criteria = criteria;
     }
 
-    public static Specification<Loan> withFilters(Long idClient, Long idGame, LocalDate date) {
+    public static Specification<Loan> withFilters(Long idClient, Long idGame, Date date) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -74,17 +74,6 @@ public class LoanSpecification implements Specification<Loan> {
 
         // Propiedad simple: "returned", "startDate", etc.
         return root.get(key);
-    }
-
-    public Specification<Loan> buildSpecification(List<SearchCriteria> criteriaList) {
-
-        Specification<Loan> spec = Specification.where(null);
-
-        for (SearchCriteria criteria : criteriaList) {
-            spec = spec.and(new LoanSpecification(criteria));
-        }
-
-        return spec;
     }
 
 }

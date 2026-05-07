@@ -7,7 +7,7 @@ import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface LoanService {
@@ -50,6 +50,6 @@ public interface LoanService {
      * @param idClient PK del cliente
      * @return {@link List} de {@link Game}
      */
-    Page<Loan> find(Long idClient, Long idGame, LocalDate date, Pageable pageable);
+    Page<Loan> find(Long idClient, Long idGame, Date date, Pageable pageable);
 
 }

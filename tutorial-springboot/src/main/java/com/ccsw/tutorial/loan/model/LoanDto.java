@@ -3,12 +3,12 @@ package com.ccsw.tutorial.loan.model;
 import com.ccsw.tutorial.client.model.ClientDto;
 import com.ccsw.tutorial.game.model.GameDto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class LoanDto {
     private Long id;
-    private LocalDate beginDate;
-    private LocalDate endDate;
+    private Date beginDate;
+    private Date endDate;
     private ClientDto client;
     private GameDto game;
 
@@ -20,19 +20,19 @@ public class LoanDto {
         this.id = id;
     }
 
-    public LocalDate getBeginDate() {
+    public Date getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(LocalDate beginDate) {
+    public void setBeginDate(Date beginDate) {
         this.beginDate = beginDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

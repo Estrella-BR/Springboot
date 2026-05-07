@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,8 +66,8 @@ public class LoanServiceImpl implements LoanService {
             loan = this.get(id);
         }
 
-        long daysBetween = dto.getBeginDate().getDayOfMonth() - dto.getEndDate().getDayOfMonth();
-        daysBetween = Math.abs(daysBetween);
+        long daysBetween = dto.getBeginDate().getTime() - dto.getEndDate().getTime();
+        daysBetween = Math.abs(daysBetween / (24L * 60 * 60 * 1000));
 
         if (daysBetween < 0 || daysBetween > 16) {
             throw new RuntimeException("El préstamo no puede durar más de 16 días" + daysBetween);
@@ -131,7 +131,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public Page<Loan> find(Long idClient, Long idGame, LocalDate date, Pageable pageable) {
+    public Page<Loan> find(Long idClient, Long idGame, Date date, Pageable pageable) {
 
         Specification<Loan> spec = LoanSpecification.withFilters(idClient, idGame, date);
 
