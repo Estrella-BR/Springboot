@@ -72,7 +72,7 @@ public class LoanServiceImpl implements LoanService {
         if (dto.getBeginDate().getTime() > dto.getEndDate().getTime())
             throw new EndDateBeforBeginDate("Fecha fin no puede ser anterior a la de incio");
 
-        if (daysBetween > 16) {
+        if (daysBetween > 14) {
             throw new DateRangeExceded("El préstamo no puede durar más de 14 dias");
         }
 
