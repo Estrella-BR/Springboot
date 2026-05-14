@@ -57,7 +57,7 @@ public class LoanServiceImpl implements LoanService {
     public void save(Long id, LoanDto dto) {
 
         Loan loan;
-        List<Loan> loans = loanRepository.findLoansInDateRange(dto.getBeginDate(), dto.getEndDate());
+        List<Loan> loans = loanRepository.findByBeginDateLessThanEqualAndEndDateGreaterThanEqual(dto.getBeginDate(), dto.getEndDate());
         Integer clientLoans = 0;
 
         if (id == null) {
@@ -111,8 +111,8 @@ public class LoanServiceImpl implements LoanService {
         Specification<Loan> spec = Specification.where(null);
 
         if (dto.getDate() != null) {
-            spec = spec.and(new LoanSpecification(new SearchCriteria("beginDate", "<", dto.getDate())));
-            //   spec = spec.and(new LoanSpecification(new SearchCriteria("endDate", ">", date)));
+            spec = spec.and(new LoanSpecification(new SearchCriteria("beginDate", "<=", dto.getDate())));
+            spec = spec.and(new LoanSpecification(new SearchCriteria("endDate", ">=", dto.getDate())));
         }
 
         if (dto.getClient() != null) {

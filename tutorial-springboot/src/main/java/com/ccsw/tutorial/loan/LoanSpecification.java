@@ -43,17 +43,30 @@ public class LoanSpecification implements Specification<Loan> {
     @Override
     public Predicate toPredicate(Root<Loan> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
-        if (criteria.getOperation().equalsIgnoreCase(":") && criteria.getValue() != null) {
-            Path<String> path = getPath(root);
+        if (criteria.getValue() == null) {
+            return null;
+        }
+
+        Path path = getPath(root);
+
+        switch (criteria.getOperation()) {
+
+        case ":":
             if (path.getJavaType() == String.class) {
                 return builder.like(path, "%" + criteria.getValue() + "%");
             } else {
                 return builder.equal(path, criteria.getValue());
             }
+
+        case "<=":
+            return builder.lessThanOrEqualTo(path, (Comparable) criteria.getValue());
+
+        case ">=":
+            return builder.greaterThanOrEqualTo(path, (Comparable) criteria.getValue());
+
+        default:
+            return null;
         }
-
-        return null;
-
     }
 
     private Path getPath(Root<Loan> root) {
