@@ -18,7 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -77,7 +76,7 @@ public class LoanServiceImpl implements LoanService {
         }
 
         for (Loan l : loans) {
-            if (Objects.equals(l.getClient().getId(), dto.getClient().getId()) && l.getId() != loan.getId())
+            if (l.getClient().getId() == dto.getClient().getId() && l.getId() != loan.getId())
                 clientLoans++;
             if (l.getGame().getId() == dto.getGame().getId() && l.getId() != loan.getId())
                 throw new GameLoaned("El juego ya está prestado");
