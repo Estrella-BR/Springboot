@@ -9,15 +9,14 @@ import com.ccsw.tutorial.loan.exception.GameLoaned;
 import com.ccsw.tutorial.loan.exception.LoanLimit;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -106,25 +105,25 @@ public class LoanServiceImpl implements LoanService {
         this.loanRepository.deleteById(id);
     }
 
-    private Specification<Loan> buildSpecification(List<SearchCriteria> criteriaList) {
+    @Override
+    public Page<Loan> findPage(LoanSearchDto dto) {
 
         Specification<Loan> spec = Specification.where(null);
 
-        if (criteriaList != null) {
-            for (SearchCriteria criteria : criteriaList) {
-                spec = spec.and(new LoanSpecification(criteria));
-            }
+        if (dto.getDate() != null) {
+            spec = spec.and(new LoanSpecification(new SearchCriteria("beginDate", "<", dto.getDate())));
+            //   spec = spec.and(new LoanSpecification(new SearchCriteria("endDate", ">", date)));
         }
 
-        return spec;
+        if (dto.getClient() != null) {
+            spec = spec.and(new LoanSpecification(new SearchCriteria("client.id", ":", dto.getClient().getId())));
+        }
+
+        if (dto.getGame() != null) {
+            spec = spec.and(new LoanSpecification(new SearchCriteria("game.id", ":", dto.getGame().getId())));
+        }
+
+        return loanRepository.findAll(spec, dto.getPageable().getPageable());
     }
 
-    @Override
-    public Page<Loan> find(Long idClient, Long idGame, Date date, Pageable pageable) {
-
-        Specification<Loan> spec = LoanSpecification.withFilters(idClient, idGame, date);
-
-        return loanRepository.findAll(spec, pageable);
-
-    }
 }

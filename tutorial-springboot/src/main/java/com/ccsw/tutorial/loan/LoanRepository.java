@@ -17,7 +17,7 @@ public interface LoanRepository extends CrudRepository<Loan, Long>, JpaSpecifica
 
     @Override
     @EntityGraph(attributePaths = { "client", "game" })
-    Page<Loan> findAll(Specification<Loan> spec, Pageable pageable);
+    Page<Loan> findAll(Specification<Loan> spec, Pageable page);
 
     @Query("SELECT l FROM Loan l WHERE l.beginDate <= :endDate AND l.endDate >= :beginDate")
     List<Loan> findLoansInDateRange(@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);

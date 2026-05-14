@@ -2,17 +2,17 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "Loan", description = "API of Loan")
 @RequestMapping(value = "/loan")
@@ -52,18 +52,15 @@ public class LoanController {
     /**
      * Método para recuperar una lista de {@link Loan}
      *
-     * @param idClient PK del cliente
-     * @param idGame PK del game
      * @return {@link List} de {@link LoanDto}
      */
     @Operation(summary = "Find", description = "Method that return a filtered list of Loans")
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public Page<LoanDto> find(@RequestParam(value = "idClient", required = false) Long idClient, @RequestParam(value = "idGame", required = false) Long idGame,
-            @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date, Pageable pageable) {
+    @RequestMapping(path = "", method = RequestMethod.POST)
+    public Page<LoanDto> find(@RequestBody LoanSearchDto dto) {
 
-        Page<Loan> page = loanService.find(idClient, idGame, date, pageable);
+        Page<Loan> page = loanService.findPage(dto);
 
-        return page.map(loan -> mapper.map(loan, LoanDto.class));
+        return new PageImpl<>(page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), page.getPageable(), page.getTotalElements());
     }
 
 }

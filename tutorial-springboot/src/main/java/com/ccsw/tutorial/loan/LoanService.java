@@ -3,10 +3,9 @@ package com.ccsw.tutorial.loan;
 import com.ccsw.tutorial.game.model.Game;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
 import java.util.List;
 
 public interface LoanService {
@@ -43,10 +42,8 @@ public interface LoanService {
     /**
      * Recupera los juegos filtrando opcionalmente por título y/o categoría
      *
-     * @param idGame PK del juego
-     * @param idClient PK del cliente
      * @return {@link List} de {@link Game}
      */
-    Page<Loan> find(Long idClient, Long idGame, Date date, Pageable pageable);
+    Page<Loan> findPage(LoanSearchDto dto);
 
 }
