@@ -2,20 +2,17 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
-import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "Loan", description = "API of Loan")
 @RequestMapping(value = "/loan")
@@ -50,22 +47,6 @@ public class LoanController {
     public void delete(@PathVariable("id") Long id) throws Exception {
 
         this.loanService.delete(id);
-    }
-
-    /**
-     * Método para recuperar un listado paginado de {@link Loan}
-     *
-     * @param dto dto de búsqueda
-     * @return {@link Page} de {@link LoanDto}
-     */
-    @Operation(summary = "Find Page", description = "Method that return a page of Authors")
-    @RequestMapping(path = "", method = RequestMethod.POST)
-    public Page<LoanDto> find(@RequestBody LoanSearchDto dto) {
-
-        Page<Loan> page = this.loanService.findPage(dto);
-
-        return new PageImpl<>(page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), page.getPageable(), page.getTotalElements());
-
     }
 
     /**

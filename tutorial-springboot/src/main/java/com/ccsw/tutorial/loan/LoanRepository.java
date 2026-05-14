@@ -16,7 +16,7 @@ import java.util.List;
 public interface LoanRepository extends CrudRepository<Loan, Long>, JpaSpecificationExecutor<Loan> {
 
     @Override
-    @EntityGraph(attributePaths = { "client", "game", "beginDate" })
+    @EntityGraph(attributePaths = { "client", "game" })
     Page<Loan> findAll(Specification<Loan> spec, Pageable pageable);
 
     @Query("SELECT l FROM Loan l WHERE l.beginDate <= :endDate AND l.endDate >= :beginDate")

@@ -37,7 +37,8 @@ public class LoanIT {
     private static final Long EXISTS_CLIENT = 3L;
     private static final Long NOT_EXISTS_GAME = 7L;
     private static final Long NOT_EXISTS_CLIENT = 4L;
-    private static final Date EXIST_DATE = Date.from(Instant.parse("2025-03-03T14:30:00.000Z"));
+    //private static final String EXIST_DATE = "2025-01-01T14:30:00.000+02:00";
+    private static final Date EXIST_DATE = Date.from(Instant.parse("2025-01-01T14:30:00.000+02:00"));
     private static final Date NOT_EXIST_DATE = Date.from(Instant.parse("2026-03-03T14:30:00.000Z"));
 
     private static final Long MODIFY_LOAN_ID = 5L;

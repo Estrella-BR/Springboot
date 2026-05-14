@@ -3,7 +3,6 @@ package com.ccsw.tutorial.loan;
 import com.ccsw.tutorial.game.model.Game;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
-import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -40,8 +39,6 @@ public interface LoanService {
      * @param id PK de la entidad
      */
     void delete(Long id) throws Exception;
-
-    Page<Loan> findPage(LoanSearchDto dto);
 
     /**
      * Recupera los juegos filtrando opcionalmente por título y/o categoría
