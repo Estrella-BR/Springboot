@@ -1,5 +1,6 @@
 package com.ccsw.tutorial.client;
 
+import com.ccsw.tutorial.client.exception.ExistsClient;
 import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.client.model.ClientDto;
 import jakarta.transaction.Transactional;
@@ -23,9 +24,13 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void save(Long id, ClientDto dto) {
         Client client;
+        List<Client> clients = this.clientRepository.findByNameIgnoreCase(dto.getName());
 
         if (id == null) {
             client = new Client();
+
+            if (clients.size() > 0)
+                throw new ExistsClient("Ya existe el cliente");
         } else {
             client = this.get(id);
         }

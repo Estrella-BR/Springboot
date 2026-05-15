@@ -1,5 +1,6 @@
 package com.ccsw.tutorial.common.exception;
 
+import com.ccsw.tutorial.client.exception.ExistsClient;
 import com.ccsw.tutorial.loan.exception.DateRangeExceded;
 import com.ccsw.tutorial.loan.exception.EndDateBeforBeginDate;
 import com.ccsw.tutorial.loan.exception.GameLoaned;
@@ -29,6 +30,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GameLoaned.class)
     ResponseEntity<String> handleGameLoaned(GameLoaned ex) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ExistsClient.class)
+    ResponseEntity<String> ExistsClient(ExistsClient ex) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
     }
 
