@@ -56,7 +56,7 @@ public class LoanServiceImpl implements LoanService {
     public void save(Long id, LoanDto dto) {
 
         Loan loan;
-        List<Loan> loans = loanRepository.findByBeginDateLessThanEqualAndEndDateGreaterThanEqual(dto.getBeginDate(), dto.getEndDate());
+        List<Loan> loans = loanRepository.findByBeginDateLessThanEqualAndEndDateGreaterThanEqual(dto.getEndDate(), dto.getBeginDate());
         Integer clientLoans = 0;
 
         if (id == null) {
@@ -76,13 +76,14 @@ public class LoanServiceImpl implements LoanService {
         }
 
         for (Loan l : loans) {
-            if (l.getClient().getId() == dto.getClient().getId() && l.getId() != loan.getId())
+            if (l.getClient().getId().equals(dto.getClient().getId()) && l.getId() != loan.getId())
                 clientLoans++;
-            if (l.getGame().getId() == dto.getGame().getId() && l.getId() != loan.getId())
+
+            if (l.getGame().getId().equals(dto.getGame().getId()) && l.getId() != loan.getId())
                 throw new GameLoaned("El juego ya está prestado");
         }
 
-        if (clientLoans == 2)
+        if (clientLoans >= 2)
             throw new LoanLimit("El cliente ya tiene prestado 2 juegos");
 
         BeanUtils.copyProperties(dto, loan, "id", "game", "client");
